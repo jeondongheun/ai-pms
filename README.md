@@ -5,12 +5,31 @@
 
 ---
 
+## 스크린샷
+
+**계약 프로젝트 대시보드**
+![대시보드](docs/screenshot_dashboard.png)
+
+**버전 이력 관리**
+![버전 이력](docs/screenshot_versions.png)
+
+**AI 검토 결과 (누락 조항 / 오류 조항 / 개선 제안)**
+![AI 검토 결과](docs/screenshot_review.png)
+
+**AI 지적사항 반영률 분석**
+![반영률](docs/screenshot_reflection.png)
+
+**버전 간 Diff 비교 (LCS 알고리즘)**
+![Diff 비교](docs/screenshot_diff.png)
+
+---
+
 ## 주요 기능
 
 - **계약서 AI 검토** — GPSP 성령, GCP 성령, ICH E2A, 개인정보보호법 기준으로 자동 분석
 - **리스크 등급 판정** — HIGH / MEDIUM / LOW 3단계
 - **버전 관리** — 계약서 수정 이력 추적 (원본 → 1차 수정본 → 2차 수정본)
-- **버전 diff 비교** — 이전 버전과의 변경 내용 시각화
+- **버전 Diff 비교** — LCS 알고리즘으로 이전 버전과의 변경 내용 줄 단위 시각화
 - **AI 지적사항 반영률** — 이전 버전 지적사항이 새 버전에 얼마나 반영됐는지 % 표시
 - **계약서 암호화** — AES-256으로 원문 암호화 저장
 
@@ -138,5 +157,3 @@ npm run dev
 | 데이터 품질 | AI 실패 시 UNKNOWN 캐시 저장 | 유효성 검증 후 저장, 실패 시 삭제 | 캐시 오염 방지 |
 | 안정성 | AI 실패 시 불완전 레코드 잔존 | DB::transaction 롤백 | 데이터 일관성 |
 | 검색 품질 | 개인정보 쿼리 Rerank 점수 전부 음수 | 개인정보보호법 데이터 추가 | 검색 정확도 향상 |
-
-
