@@ -1,0 +1,46 @@
+ICH E2A Clinical Safety Data Management: Definitions and Standards for Expedited Reporting
+
+Section I: Introduction
+It is important to harmonise the way to gather and take action on important clinical safety information arising during clinical development. Agreed definitions, terminology, and procedures will ensure uniform Good Clinical Practice standards.
+
+Section II-A: Basic Terms - Adverse Event AE
+Adverse Event (AE) 이상사례 유해사례: Any untoward medical occurrence in a patient or clinical investigation subject administered a pharmaceutical product. An AE does not necessarily have a causal relationship with this treatment.
+
+Section II-B: Adverse Drug Reaction ADR 부작용 약물유해반응
+Adverse Drug Reaction (ADR): All noxious and unintended responses to a medicinal product related to any dose. A causal relationship between a medicinal product and an adverse event is at least a reasonable possibility.
+
+Section II-C: Unexpected Adverse Drug Reaction 예상치 못한 이상반응
+Unexpected Adverse Drug Reaction: An adverse reaction whose nature or severity is not consistent with the applicable product information.
+
+Section II-D: Serious Adverse Event SAE 중대한 이상사례
+A serious adverse event (SAE) 중대한 이상사례 is any untoward medical occurrence that at any dose:
+- Results in death 사망
+- Is life-threatening 생명을 위협
+- Requires inpatient hospitalisation 입원 or prolongation of existing hospitalisation
+- Results in persistent or significant disability or incapacity 영구적 장애
+- Is a congenital anomaly or birth defect 선천성 기형
+
+Section III: Standards for Expedited Reporting 신속보고 기준
+
+Section III-A: Reporting Time Frames 보고 기한
+Fatal or life-threatening unexpected ADRs 치명적 예상치 못한 이상반응:
+보고 기한 Report as soon as possible, not later than 7 calendar days 7일 이내 after first knowledge by the sponsor.
+A follow-up report must be filed within 8 additional calendar days (15 days total 총 15일 from first knowledge).
+
+All other serious unexpected ADRs 기타 중대한 예상치 못한 이상반응:
+보고 기한 Report as soon as possible, not later than 15 calendar days 15일 이내 after first knowledge by the sponsor.
+
+Section III-B: Post-Marketing Reports 시판후 보고
+For post-marketing 시판후 serious unexpected ADRs from spontaneous reports, the 15-day 15일 expedited reporting standard applies.
+
+Section III-C: Non-Serious ADRs 비중대한 이상반응
+Non-serious ADRs do not require expedited reporting. Submit in periodic safety update reports (PSURs) 정기안전성보고.
+
+Section III-D: Causality Assessment 인과관계 평가
+Causality assessment 인과관계 평가 is required for all clinical investigation cases. All cases judged as having a reasonable suspected causal relationship qualify as ADRs.
+
+Section IV: Reporting Time Frames Summary 보고 기한 요약
+- Unexpected fatal/life-threatening SAE: 7 calendar days 7일
+- All other unexpected serious ADR: 15 calendar days 15일
+- Expected serious ADR: Periodic reports PSUR
+- Non-serious ADR: Periodic reports PSUR

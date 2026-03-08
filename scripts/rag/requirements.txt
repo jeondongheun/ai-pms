@@ -1,0 +1,5 @@
+pinecone
+sentence-transformers
+python-dotenv
+requests
+beautifulsoup4
