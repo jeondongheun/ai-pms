@@ -1,59 +1,142 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# AI-PMS
+**AI 기반 일본 PMS 계약서 자동 검토 시스템**
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+일본 제약 시판후조사(PMS) 계약서를 Claude AI와 RAG(검색 증강 생성)로 자동 분석해 법령 위반 조항, 누락 조항, 개선 제안을 제공하는 웹 애플리케이션입니다.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 주요 기능
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- **계약서 AI 검토** — GPSP 성령, GCP 성령, ICH E2A, 개인정보보호법 기준으로 자동 분석
+- **리스크 등급 판정** — HIGH / MEDIUM / LOW 3단계
+- **버전 관리** — 계약서 수정 이력 추적 (원본 → 1차 수정본 → 2차 수정본)
+- **버전 diff 비교** — 이전 버전과의 변경 내용 시각화
+- **AI 지적사항 반영률** — 이전 버전 지적사항이 새 버전에 얼마나 반영됐는지 % 표시
+- **계약서 암호화** — AES-256으로 원문 암호화 저장
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 기술 스택
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+| 구분 | 기술 |
+|------|------|
+| Backend | Laravel 12, PHP 8.5 |
+| Frontend | Blade, Tailwind CSS, Vite |
+| Database | MySQL 8 |
+| AI | Claude API (claude-haiku) |
+| Vector DB | Pinecone |
+| Embedding | sentence-transformers (paraphrase-multilingual-mpnet-base-v2) |
+| Reranking | CrossEncoder (ms-marco-MiniLM-L-6-v2) |
+| RAG Server | FastAPI (Python 3.12) |
+| 인증 | Laravel Breeze |
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-## Laravel Sponsors
+## 아키텍처
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+```
+계약서 제출
+  ↓
+SHA-256 해시 → 캐시 확인 (API 비용 절감)
+  ↓ 캐시 미스
+FastAPI /search → Pinecone 벡터 검색 (Bi-Encoder top 20)
+  ↓
+CrossEncoder Reranking (top 5)
+  ↓
+Claude API 호출 (법령 컨텍스트 + 계약서 원문)
+  ↓
+JSON 파싱 → AES-256 암호화 → DB 저장
+```
 
-### Premium Partners
+**RAG 법령 데이터 소스**
+- 일본 GPSP 성령 (厚生労働省令第171号) — 42개 조항
+- 일본 GCP 성령 (厚生省令第28号) — 197개 조항
+- ICH E2A Clinical Safety Data Management Guideline — 11개 조항
+- 일본 개인정보보호법 — 12개 조항
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+---
 
-## Contributing
+## 설치 및 실행
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 사전 요구사항
+- PHP 8.5+, Composer
+- Node.js 18+
+- Python 3.12+
+- MySQL 8
+- Pinecone API Key
+- Anthropic API Key
 
-## Code of Conduct
+### 1. Laravel 설정
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+git clone https://github.com/jeondongheun/ai-pms.git
+cd ai-pms
 
-## Security Vulnerabilities
+composer install
+npm install
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+cp .env.example .env
+php artisan key:generate
+```
 
-## License
+`.env` 설정:
+```
+DB_DATABASE=ai_pms
+DB_USERNAME=root
+DB_PASSWORD=your_password
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+ANTHROPIC_API_KEY=sk-ant-...
+ANTHROPIC_MODEL=claude-haiku-4-5-20251001
+ANTHROPIC_MAX_TOKENS=2000
+
+PINECONE_API_KEY=your_pinecone_key
+PINECONE_INDEX=ai-pms
+
+RAG_SERVER_URL=http://localhost:8001
+```
+
+```bash
+php artisan migrate
+npm run build
+```
+
+### 2. Python RAG 서버 설정
+
+```bash
+python -m venv venv
+source venv/bin/activate
+
+pip install -r scripts/rag/requirements.txt
+
+# 법령 데이터 Pinecone에 인덱싱 (최초 1회)
+python scripts/rag/ingest.py
+```
+
+### 3. 서버 실행
+
+```bash
+# 터미널 1 - FastAPI RAG 서버
+uvicorn scripts.rag.rag_server:app --host 0.0.0.0 --port 8001
+
+# 터미널 2 - Laravel
+php artisan serve
+
+# 터미널 3 - Vite (개발 시)
+npm run dev
+```
+
+`http://localhost:8000` 접속
+
+---
+
+## 주요 개선 사항
+
+| 구분 | 문제 | 해결 | 효과 |
+|------|------|------|------|
+| 성능 | shell_exec로 Python 호출 시 매번 모델 로드 | FastAPI 상시 서버로 전환 | 30초 → 3초 |
+| 보안 | 계약서 원문 평문 저장 | Laravel encrypted cast (AES-256) | 개인정보 보호 |
+| 데이터 품질 | AI 실패 시 UNKNOWN 캐시 저장 | 유효성 검증 후 저장, 실패 시 삭제 | 캐시 오염 방지 |
+| 안정성 | AI 실패 시 불완전 레코드 잔존 | DB::transaction 롤백 | 데이터 일관성 |
+| 검색 품질 | 개인정보 쿼리 Rerank 점수 전부 음수 | 개인정보보호법 데이터 추가 | 검색 정확도 향상 |
+
+
